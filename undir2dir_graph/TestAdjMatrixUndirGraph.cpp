@@ -20,7 +20,7 @@ int main(void) {
         for (int u = 0; u < n; u++)
             for (int v = 0; v < n; v++)
                 if (m[u][v] == 1) g.InsertArc(u, v, u + v);
-        while (c != 'B') {
+        while (c != 'C') {
             cout << endl << "1. 图清空.";
             cout << endl << "2. 显示图.";
             cout << endl << "3. 取指定顶点的值.";
@@ -31,7 +31,9 @@ int main(void) {
             cout << endl << "8. 插入边.";
             cout << endl << "9. 查询顶点出度数";
             cout << endl << "A. 查询顶点入度数";
-            cout << endl << "选择功能(1~B):";
+            cout << endl << "B. 查询两顶点的最小路径值";
+            cout << endl << "C. 退出";
+            cout << endl << "选择功能(1~C):";
             cin >> c;
             switch (c) {
                 case '1':
@@ -91,6 +93,12 @@ int main(void) {
                     cin >> e;
                     v = g.CountInDegree(e);
                     cout << "该节点入度数:" << v << endl;
+                    break;
+                case 'B':
+                    cout << "输入两个节点的值:";
+                    cin >> e1 >> e2;
+                    v = g.ShortestPath_Floued(e1,e2);
+                    cout << "最短路径值：" << v << endl;
                     break;
             }
         }

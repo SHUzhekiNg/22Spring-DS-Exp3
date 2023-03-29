@@ -55,7 +55,7 @@ public:
 
     int CountInDegree(ElemType &e);
 
-    int ShortestPath(ElemType &e1, ElemType &e2);
+    int ShortestPath_Floued(ElemType &e1, ElemType &e2);
 };
 
 // 无向图的邻接矩阵类的实现部分
@@ -92,9 +92,9 @@ int AdjMatrixUndirGraph<ElemType>::CountInDegree(ElemType &e) {
 }
 
 template<class ElemType>
-int AdjMatrixUndirGraph<ElemType>::ShortestPath(ElemType &e1, ElemType &e2) {
+int AdjMatrixUndirGraph<ElemType>::ShortestPath_Floued(ElemType &e1, ElemType &e2) {
     int v1 = -1, v2 = -1;
-    for (int i = 0; i < vexNum; ++v1) {
+    for (int i = 0; i < vexNum; ++i) {
         if (vertexes[i] == e1) v1 = i;
         if (vertexes[i] == e2) v2 = i;
     }
@@ -103,7 +103,18 @@ int AdjMatrixUndirGraph<ElemType>::ShortestPath(ElemType &e1, ElemType &e2) {
     } else if (v1 == v2) {
         return 0;
     }
-    
+    int pathlen = arcs[v1][v2] == -1 ? DEFAULT_INFINITY : arcs[v1][v2];
+    for (int mid = 0; mid < vexNum; mid++) {
+        if (mid == v1 || mid == v2) {
+            int d = arcs[v1][v2] == -1 ? DEFAULT_INFINITY : arcs[v1][v2];
+            pathlen = pathlen < d ? pathlen : d;
+        } else {
+            int front = arcs[v1][mid] == -1 ? DEFAULT_INFINITY : arcs[v1][mid];
+            int rear = arcs[mid][v2] == -1 ? DEFAULT_INFINITY : arcs[mid][v2];
+            pathlen = pathlen < (front + rear) ? pathlen : (front + rear);
+        }
+    }
+    return pathlen;
 }
 
 template<class ElemType>
