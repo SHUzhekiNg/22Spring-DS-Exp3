@@ -22,7 +22,7 @@ int main(void)
         cout << endl << "1. 插入元素.";
         cout << endl << "2. 查找元素.";
         cout << endl << "3. 删除元素1.";
-        cout << endl << "4. 删除元素1.";
+        cout << endl << "4. 删除元素2.";
         cout << endl << "5. 先序遍历.";
         cout << endl << "6. 中序遍历.";
         cout << endl << "7. 后序遍历.";

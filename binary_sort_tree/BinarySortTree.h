@@ -25,7 +25,7 @@ protected:
 	BinTreeNode<ElemType> *Find(const ElemType &key, BinTreeNode<ElemType> *&f) const;	
 		// 查找关键字为key的数据元素
 	void Delete(BinTreeNode<ElemType> *&p);				// 删除p指向的结点
-    void Delete2(BinTreeNode<ElemType> *&p);				// 删除p指向的结点
+    void Delete2(BinTreeNode<ElemType> *&p, BinTreeNode<ElemType> *&f);				// 删除p指向的结点
 
 public:
 //  二叉排序树方法声明及重载编译系统默认方法声明:
@@ -375,7 +375,7 @@ void BinarySortTree<ElemType>::Delete(BinTreeNode<ElemType> *&p)
 }
 
 template <class ElemType>
-void BinarySortTree<ElemType>::Delete2(BinTreeNode<ElemType> *&p)
+void BinarySortTree<ElemType>::Delete2(BinTreeNode<ElemType> *&p, BinTreeNode<ElemType> *&f)
 {
     if (p == NULL) { // 删除空结点
         return;
@@ -392,19 +392,14 @@ void BinarySortTree<ElemType>::Delete2(BinTreeNode<ElemType> *&p)
     } else {    // p左右子非空
         tmpF = p;
         tmpPtr = p->rightChild;
-        if (tmpPtr->leftChild == NULL) { // 如果p的后继是其右孩子，则直接交换数据和指针
-            p->data = tmpPtr->data;
-            p->rightChild = tmpPtr->rightChild;
-            delete tmpPtr;
-        } else { // 如果p的后继不是其右孩子，则找到其后继的左子树的最左结点
-            while (tmpPtr->leftChild != NULL) {
-                tmpF = tmpPtr;
-                tmpPtr = tmpPtr->leftChild;
-            }
-            p->data = tmpPtr->data; // 交换数据
-            tmpF->leftChild = tmpPtr->rightChild; // 将其后继的左子树移动到其后继的位置
-            delete tmpPtr;
+        while (tmpPtr->leftChild != NULL) {
+            tmpF = tmpPtr;
+            tmpPtr = tmpPtr->leftChild;
         }
+        tmpPtr->leftChild = p->leftChild;
+        if(f->leftChild == p) f->leftChild = p->rightChild;
+        else if(f->rightChild == p) f->rightChild = p->rightChild;
+        delete p;
     }
 }
 
@@ -437,12 +432,7 @@ bool BinarySortTree<ElemType>::Delete2(const ElemType &key)
     if ( p == NULL)	// 查找失败, 删除失败
         return false;
     else	// 查找成功, 插入失败
-    if (f == NULL)	// 被删除结点为根结点
-        Delete2(p);
-    else if (key < f->data)	// elem.key更小,删除f的左孩子
-        Delete2(f->leftChild);
-    else	// elem.key更大, 删除f的右孩子
-        Delete2(f->rightChild);
+        Delete2(p,f);
     return true;
 }
 
